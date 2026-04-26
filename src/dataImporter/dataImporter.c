@@ -1,6 +1,6 @@
-#include "fileReader.h"
+#include "dataImporter.h"
 
-FILE* open_file(const char* filename)
+FILE* data_importer_open_file(const char* filename)
 {
     FILE* f  = fopen(filename, "r");
 
@@ -13,7 +13,7 @@ FILE* open_file(const char* filename)
     return f;
 }
 
-long get_file_size(FILE* f)
+long data_importer_get_file_size(FILE* f)
 {
     fseek(f, 0, SEEK_END);
     long size = ftell(f);
@@ -24,10 +24,10 @@ long get_file_size(FILE* f)
     return size;
 }
 
-char* get_buffer(FILE* f)
+char* data_importer_get_buffer(FILE* f)
 {
     // Get file size
-    long size = get_file_size(f);
+    long size = data_importer_get_file_size(f);
 
     if (size < 0)
         return NULL;
@@ -54,7 +54,7 @@ char* get_buffer(FILE* f)
     return buffer;
 }
 
-void cleanup(FILE* f, char* buffer) 
+void data_importer_cleanup(FILE* f, char* buffer) 
 {
     if (f)
         fclose(f);

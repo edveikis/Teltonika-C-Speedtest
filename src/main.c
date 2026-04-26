@@ -4,16 +4,16 @@
 #include <unistd.h>
 
 #include "cJSON.h"
-#include "fileReader.h"
+#include "dataImporter.h"
 
 int main(int argc, char *argv[]) 
 {
-    FILE* f = open_file("speedtest_server_list.json");
+    FILE* f = data_importer_open_file("speedtest_server_list.json");
 
     if (!f)
         return 1;
 
-    char* buffer = get_buffer(f);
+    char* buffer = data_importer_get_buffer(f);
 
     if (!buffer)
     {
@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     printf("%s\n", buffer);
     
-    cleanup(f, buffer);
+    data_importer_cleanup(f, buffer);
 
     return 0;
 }
