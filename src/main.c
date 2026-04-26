@@ -10,7 +10,7 @@
 
 int main(int argc, char *argv[]) 
 {
-    cJSON *root = cJSON_CreateNull();
+    cJSON *root = NULL;
 
     int res = getLocation(&root);
 
@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    if (cJSON_IsNull(root))
+    if (root == NULL)
     {
         printf("cJSON root is null");
         return 1;
@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
     printf("%s\n", getCountry(root));
     printf("%s\n", getCity(root));
 
+    cJSON_Delete(root);
 
     // int opt;
     // int download = 0;

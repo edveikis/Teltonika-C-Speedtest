@@ -16,14 +16,31 @@ int getLocation(cJSON** root)
     if (!*root)
     {
         printf("[ERROR] JSON root was NULL");
+        free(response.data);
+        response.data = NULL;
+        response.size = 0;
         return 1;
     }
 
-    char* status = cJSON_GetObjectItem(*root, "status")->valuestring;
-    if (strcmp(status, "success") != 0)
+    cJSON* status = cJSON_GetObjectItem(*root, "status");
+    
+    if (!cJSON_IsString(status))
     {
+        printf("[ERROR] Unknown/missing format");
+        cJSON_Delete(*root);
+        free(response.data);
+        return 1;
+    }
+
+    if (strcmp(status->valuestring, "success") != 0)
+    {
+        cJSON* message = cJSON_GetObjectItem(*root, "message");
         printf("[ERROR] API request for location data failed: %s\n", 
-        cJSON_GetObjectItem(*root, "message")->valuestring);
+        cJSON_IsString(message) ? message->valuestring : "Unknown message");
+        cJSON_Delete(*root);
+        free(response.data);
+        response.data = NULL;
+        response.size = 0;
         return 1;
     }
 
@@ -39,7 +56,12 @@ char* getCity(cJSON* root)
     if (!root)
         return NULL;
 
-    return cJSON_GetObjectItem(root, "city")->valuestring;
+    cJSON* city = cJSON_GetObjectItem(root, "city");
+
+    if (!cJSON_IsString(city))
+        return NULL;
+
+    return city->valuestring;
 }
 
 char* getCountry(cJSON* root)
@@ -47,5 +69,10 @@ char* getCountry(cJSON* root)
     if (!root)
         return NULL;
 
-    return cJSON_GetObjectItem(root, "country")->valuestring;
+    cJSON* country = cJSON_GetObjectItem(root, "country");
+
+    if (!cJSON_IsString(country))
+        return NULL;
+
+    return country->valuestring;
 }
