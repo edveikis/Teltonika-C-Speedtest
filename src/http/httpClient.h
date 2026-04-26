@@ -6,10 +6,7 @@
 #include <memory.h>
 #include <curl/curl.h>
 
-struct Memory {
-    char *data;
-    size_t size;
-};
+#include "../memory.h"
 
 /// @brief Makes an HTTP request
 /// @param dst domain to make request to

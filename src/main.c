@@ -6,21 +6,29 @@
 #include "cJSON.h"
 #include "dataImporter.h"
 #include "httpClient.h"
+#include "locationService.h"
 
 int main(int argc, char *argv[]) 
 {
-    struct Memory response = {0};
-    int res = makeRequest("http://ip-api.com/json", &response);
+    cJSON *root = cJSON_CreateNull();
 
-    if (res != CURLE_OK)
+    int res = getLocation(&root);
+
+    if (res != 0)
     {
-        printf("Request failed");
+        printf("[ERROR] Failed to get location of the user\n");
         return 1;
     }
 
-    printf("%s", response.data);
+    if (cJSON_IsNull(root))
+    {
+        printf("cJSON root is null");
+        return 1;
+    }
 
-    free(response.data);
+    printf("%s\n", getCountry(root));
+    printf("%s\n", getCity(root));
+
 
     // int opt;
     // int download = 0;
