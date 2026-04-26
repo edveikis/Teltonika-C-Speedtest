@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -I./src/lib/cjson -I./src/dataImporter -I./src/http -I./s
 LDFLAGS = -lcurl
 
 SRC = src/main.c src/lib/cjson/cJSON.c src/dataImporter/dataImporter.c src/http/httpClient.c src/locationService/locationService.c
-OBJ = $(SRC:.c=.o)
+OBJ = $(SRC:src/%.c=obj/%.o)
 
 TARGET = bin/speedtest
 
@@ -14,7 +14,8 @@ $(TARGET): $(OBJ)
 	@mkdir -p bin
 	$(CC) $(OBJ) -o $(TARGET) $(LDFLAGS)
 
-%.o: %.c
+obj/%.o: src/%.c
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
