@@ -1,11 +1,13 @@
 # Teltonika-c-speedtest
 
-## Dependencies
+## External dependencies
 
-* libcurl
+- [cJSON](https://github.com/davegamble/cjson#including-cjson)
+
+## System-level dependencies
+
+- libcurl
 
 ```bash
 sudo dnf install libcurl-devel
 ```
-
-* [cJSON](https://github.com/davegamble/cjson#including-cjson)
