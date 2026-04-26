@@ -1,9 +1,9 @@
 CC = gcc
 
-CFLAGS = -Wall -Wextra -I./src/lib/cjson
+CFLAGS = -Wall -Wextra -I./src/lib/cjson -I./src/fileReader
 LDFLAGS = -lcurl
 
-SRC = src/main.c src/lib/cjson/cJSON.c
+SRC = src/main.c src/lib/cjson/cJSON.c src/fileReader/fileReader.c
 OBJ = $(SRC:.c=.o)
 
 TARGET = bin/speedtest
