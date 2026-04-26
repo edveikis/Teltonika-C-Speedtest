@@ -1,3 +1,4 @@
 speedtest_server_list.json
 bin/
 *.o
+.vscode/
