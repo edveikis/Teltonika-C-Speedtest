@@ -16,7 +16,10 @@ int main(int argc, char *argv[])
     char* buffer = get_buffer(f);
 
     if (!buffer)
+    {
+        fclose(f);
         return 1;
+    }
 
     printf("%s\n", buffer);
     

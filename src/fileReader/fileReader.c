@@ -17,6 +17,8 @@ long get_file_size(FILE* f)
 {
     fseek(f, 0, SEEK_END);
     long size = ftell(f);
+    if (size < 0)
+        return -1;
     rewind(f); 
 
     return size;
@@ -27,12 +29,14 @@ char* get_buffer(FILE* f)
     // Get file size
     long size = get_file_size(f);
 
+    if (size < 0)
+        return NULL;
+
     // Allocate buffer for data
     char *buffer = malloc(size + 1);
     if (!buffer)
     {
         printf("[ERROR] Could not allocate buffer\n");
-        fclose(f);
         return NULL;
     }
 
@@ -42,7 +46,6 @@ char* get_buffer(FILE* f)
     {
         printf("[ERROR] Read size doesnt match size of file\n");
         free(buffer);
-        fclose(f);
         return NULL;
     }
 
@@ -53,6 +56,9 @@ char* get_buffer(FILE* f)
 
 void cleanup(FILE* f, char* buffer) 
 {
-    fclose(f);
-    free(buffer);
+    if (f)
+        fclose(f);
+
+    if (buffer)
+        free(buffer);
 }
