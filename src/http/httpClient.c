@@ -6,11 +6,13 @@
 /// @param element_count number of elements
 /// @param user_data ptr passed via CURLOPT_WRITEDATA to store data
 /// @return 
-size_t write_callback(void *data, size_t size, size_t element_count, void *user_data) {
+size_t write_callback(void *data, size_t size, size_t element_count, void *user_data) 
+{
     size_t total_size = size * element_count;
     struct Memory *mem = (struct Memory *)user_data;
 
     char *ptr = realloc(mem->data, mem->size + total_size + 1);
+
     if (!ptr) 
         return 0;
 
@@ -22,10 +24,6 @@ size_t write_callback(void *data, size_t size, size_t element_count, void *user_
     return total_size;
 }
 
-/// @brief Makes an HTTP request
-/// @param dst domain to make request to
-/// @param response response data and size stored here
-/// @return response code
 int makeRequest(const char* dst, struct Memory* response)
 {
     CURL *curl = curl_easy_init();
@@ -35,7 +33,6 @@ int makeRequest(const char* dst, struct Memory* response)
 
     curl_easy_setopt(curl, CURLOPT_URL, dst);
 
-    // set callback
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, response);
 

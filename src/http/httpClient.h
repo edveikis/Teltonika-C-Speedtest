@@ -11,6 +11,10 @@ struct Memory {
     size_t size;
 };
 
+/// @brief Makes an HTTP request
+/// @param dst domain to make request to
+/// @param response response data and size stored here
+/// @return response code
 int makeRequest(const char* dst, struct Memory* response);
 
 #endif
