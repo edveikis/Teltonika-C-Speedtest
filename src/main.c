@@ -17,12 +17,20 @@ int main(int argc, char *argv[])
 
     if (!buffer)
     {
-        fclose(f);
+        if (f)
+            fclose(f);
         return 1;
     }
 
-    printf("%s\n", buffer);
-    
+    cJSON *json = cJSON_Parse(buffer);
+    if (!json)
+    {
+        printf("[ERROR] Failed parsing JSON\n");
+        data_importer_cleanup(f, buffer);
+        return 1;
+    }
+
+    cJSON_Delete(json);
     data_importer_cleanup(f, buffer);
 
     return 0;
