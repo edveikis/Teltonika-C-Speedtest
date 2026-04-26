@@ -1,8 +1,8 @@
 #include "fileReader.h"
 
-FILE* open_file(const char* filename, const char* type)
+FILE* open_file(const char* filename)
 {
-    FILE* f  = fopen("speedtest_server_list.json", "r");
+    FILE* f  = fopen(filename, "r");
 
     if (!f)
     {  
