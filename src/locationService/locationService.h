@@ -8,6 +8,7 @@
 #include "../response.h"
 #include "../http/httpClient.h"
 #include "../lib/cjson/cJSON.h"
+#include "../enum.h"
 
 /// @brief Gets user location and stores it in json format in root
 /// @param root address to root ptr that stores json data
