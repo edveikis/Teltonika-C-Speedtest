@@ -1,8 +1,8 @@
 #include "locationService.h"
 
-int getLocation(cJSON** root)
+int location_service_get(cJSON** root)
 {
-    struct Memory response = {0};
+    struct Response response = {0};
     int res = makeRequest("http://ip-api.com/json/\?fields\=status,message,country,city", &response);
 
     if (res != CURLE_OK)
@@ -51,7 +51,7 @@ int getLocation(cJSON** root)
     return 0;
 }
 
-char* getCity(cJSON* root)
+char* location_service_get_city(cJSON* root)
 {
     if (!root)
         return NULL;
@@ -64,7 +64,7 @@ char* getCity(cJSON* root)
     return city->valuestring;
 }
 
-char* getCountry(cJSON* root)
+char* location_service_get_country(cJSON* root)
 {
     if (!root)
         return NULL;

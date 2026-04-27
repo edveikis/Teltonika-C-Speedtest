@@ -9,7 +9,7 @@
 size_t write_callback(void *data, size_t size, size_t element_count, void *user_data) 
 {
     size_t total_size = size * element_count;
-    struct Memory *mem = (struct Memory *)user_data;
+    struct Response *mem = (struct Response *)user_data;
 
     char *ptr = realloc(mem->data, mem->size + total_size + 1);
 
@@ -24,7 +24,7 @@ size_t write_callback(void *data, size_t size, size_t element_count, void *user_
     return total_size;
 }
 
-int makeRequest(const char* dst, struct Memory* response)
+int http_make_request(const char* dst, struct Response* response)
 {
     CURL *curl = curl_easy_init();
 

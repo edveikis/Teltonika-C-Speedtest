@@ -12,16 +12,16 @@
 /// @brief Gets user location and stores it in json format in root
 /// @param root address to root ptr that stores json data
 /// @return status code
-int getLocation(cJSON** root);
+int location_service_get(cJSON** root);
 
 /// @brief Gets user's city string from JSON root
 /// @param root JSON root with data
 /// @return City name string
-char* getCity(cJSON* root);
+char* location_service_get_city(cJSON* root);
 
 /// @brief Gets user's country string from JSON root
 /// @param root JSON root with data
 /// @return Country name string
-char* getCountry(cJSON* root);
+char* location_service_get_country(cJSON* root);
 
 #endif
