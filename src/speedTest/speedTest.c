@@ -5,9 +5,9 @@ double speed_test_download(const char* url, int size)
     char full_url[512];
 
     if (size > 0)
-        snprintf(full_url, sizeof(full_url), "http://%s/download?size=%d", url, size * 1024 * 1024);
+        snprintf(full_url, sizeof(full_url), "%s/download?size=%d", url, size * 1024 * 1024);
     else
-        snprintf(full_url, sizeof(full_url), "http://%s", url);
+        snprintf(full_url, sizeof(full_url), "%s", url);
     
     struct Response response = {0};
     int result = http_get(full_url, &response, 1);
@@ -26,7 +26,7 @@ double speed_test_upload(const char* url, int size)
 {
     char full_url[512];
 
-    snprintf(full_url, sizeof(full_url), "http://%s/upload.php", url);
+    snprintf(full_url, sizeof(full_url), "%s/upload.php", url);
 
     struct Response response = {0};
 
