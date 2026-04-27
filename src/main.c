@@ -10,26 +10,26 @@
 
 int main(int argc, char *argv[]) 
 {
-    cJSON *root = NULL;
+    // cJSON *root = NULL;
 
-    int res = getLocation(&root);
+    // int res = getLocation(&root);
 
-    if (res != 0)
-    {
-        printf("[ERROR] Failed to get location of the user\n");
-        return 1;
-    }
+    // if (res != 0)
+    // {
+    //     printf("[ERROR] Failed to get location of the user\n");
+    //     return 1;
+    // }
 
-    if (root == NULL)
-    {
-        printf("cJSON root is null");
-        return 1;
-    }
+    // if (root == NULL)
+    // {
+    //     printf("cJSON root is null");
+    //     return 1;
+    // }
 
-    printf("%s\n", getCountry(root));
-    printf("%s\n", getCity(root));
+    // printf("%s\n", getCountry(root));
+    // printf("%s\n", getCity(root));
 
-    cJSON_Delete(root);
+    // cJSON_Delete(root);
 
     // int opt;
     // int download = 0;

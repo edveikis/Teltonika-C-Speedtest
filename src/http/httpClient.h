@@ -7,6 +7,7 @@
 #include <curl/curl.h>
 
 #include "../response.h"
+#include "../enum.h"
 
 /// @brief Makes an HTTP request
 /// @param dst domain to make request to

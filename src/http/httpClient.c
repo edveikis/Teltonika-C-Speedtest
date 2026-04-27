@@ -29,7 +29,7 @@ int http_make_request(const char* dst, struct Response* response)
     CURL *curl = curl_easy_init();
 
     if (!curl)
-        return 1;
+        return CURLE_FAILED_INIT;
 
     curl_easy_setopt(curl, CURLOPT_URL, dst);
     curl_easy_setopt(curl, CURLOPT_TIMEOUT, 15L);
@@ -47,8 +47,8 @@ int http_make_request(const char* dst, struct Response* response)
         free(response->data);
         response->data = NULL;
         response->size = 0;
-        return 1;
+        return APP_REQUEST_FAILED;
     }
 
-    return res;
+    return CURLE_OK;
 }

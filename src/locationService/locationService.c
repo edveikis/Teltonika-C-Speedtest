@@ -5,10 +5,10 @@ int location_service_get(cJSON** root)
     struct Response response = {0};
     int res = makeRequest("http://ip-api.com/json/\?fields\=status,message,country,city", &response);
 
-    if (res != CURLE_OK)
+    if (res != APP_OK)
     {
         printf("Request to API failed: %s\n", curl_easy_strerror(res));
-        return 1;
+        return APP_REQUEST_FAILED;
     }
 
     *root = cJSON_Parse(response.data);
@@ -19,7 +19,7 @@ int location_service_get(cJSON** root)
         free(response.data);
         response.data = NULL;
         response.size = 0;
-        return 1;
+        return APP_INVALID_JSON;
     }
 
     cJSON* status = cJSON_GetObjectItem(*root, "status");
@@ -29,7 +29,7 @@ int location_service_get(cJSON** root)
         printf("[ERROR] Unknown/missing format");
         cJSON_Delete(*root);
         free(response.data);
-        return 1;
+        return APP_INVALID_FORMAT;
     }
 
     if (strcmp(status->valuestring, "success") != 0)
@@ -41,14 +41,14 @@ int location_service_get(cJSON** root)
         free(response.data);
         response.data = NULL;
         response.size = 0;
-        return 1;
+        return APP_API_FAILURE;
     }
 
     free(response.data);
     response.data = NULL;
     response.size = 0;
 
-    return 0;
+    return APP_OK;
 }
 
 char* location_service_get_city(cJSON* root)
