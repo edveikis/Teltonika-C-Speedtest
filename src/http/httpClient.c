@@ -32,7 +32,7 @@ int makeRequest(const char* dst, struct Memory* response)
         return 1;
 
     curl_easy_setopt(curl, CURLOPT_URL, dst);
-
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 15L);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, response);
 
