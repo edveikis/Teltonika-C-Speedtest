@@ -14,7 +14,7 @@
 /// @param dst url to make request o
 /// @param response response data
 /// @return status code
-int http_get(const char* dst, struct Response* response);
+int http_get(const char* dst, struct Response* response, int discard);
 
 /// @brief Makes a post reqeuest to specific url
 /// @param dst url to make request to

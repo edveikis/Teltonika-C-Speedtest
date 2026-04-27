@@ -5,7 +5,7 @@
 /// @param size size of one element(byte usually)
 /// @param element_count number of elements
 /// @param user_data ptr passed via CURLOPT_WRITEDATA to store data
-/// @return 
+/// @return total size
 size_t write_callback(void *data, size_t size, size_t element_count, void *user_data) 
 {
     size_t total_size = size * element_count;
@@ -24,7 +24,15 @@ size_t write_callback(void *data, size_t size, size_t element_count, void *user_
     return total_size;
 }
 
-int http_get(const char* dst, struct Response* response)
+/// @brief Callback function to discard data from request
+size_t discard_callback(void *data, size_t size, size_t element_count, void *user_data) 
+{
+    size_t total_size = size * element_count;
+
+    return total_size;
+}
+
+int http_get(const char* dst, struct Response* response, int discard)
 {
     CURL *curl = curl_easy_init();
 
@@ -32,15 +40,18 @@ int http_get(const char* dst, struct Response* response)
         return CURLE_FAILED_INIT;
 
     curl_easy_setopt(curl, CURLOPT_URL, dst);
-    // curl_easy_setopt(curl, CURLOPT_TIMEOUT, 15L);
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 15L);
+    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 5L);
 
-    // NOTE: kam rasyt duomenis i ram jei darom tik test?
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+    if (discard == 0)
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+    else
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, discard_callback);
+
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, response);
-
     CURLcode res = curl_easy_perform(curl);
 
-    if (res == CURLE_OK)
+    if (res == CURLE_OK || res == CURLE_OPERATION_TIMEDOUT)
     {
         curl_off_t pretransfer_us = 0, total_us = 0, downloaded = 0;
         curl_easy_getinfo(curl, CURLINFO_PRETRANSFER_TIME_T, &pretransfer_us);
@@ -54,7 +65,7 @@ int http_get(const char* dst, struct Response* response)
    
     curl_easy_cleanup(curl);
 
-    if (res != CURLE_OK) 
+    if (res != CURLE_OK && res != CURLE_OPERATION_TIMEDOUT) 
     {
         fprintf(stderr, "Request failed: %s\n",
             curl_easy_strerror(res));
@@ -84,6 +95,7 @@ int http_post(const char* dst, struct Response* response, const void* data, size
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_URL, dst);
     // curl_easy_setopt(curl, CURLOPT_TIMEOUT, 15L);
+    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 5L);
 
     // NOTE: kam rasyt duomenis i ram jei darom tik test?
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
@@ -91,7 +103,7 @@ int http_post(const char* dst, struct Response* response, const void* data, size
 
     CURLcode res = curl_easy_perform(curl);
 
-    if (res == CURLE_OK)
+    if (res == CURLE_OK || res == CURLE_OPERATION_TIMEDOUT)
     {
         curl_off_t pretransfer_us = 0, total_us = 0, uploaded = 0;
         curl_easy_getinfo(curl, CURLINFO_PRETRANSFER_TIME_T, &pretransfer_us);

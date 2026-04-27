@@ -2,6 +2,7 @@
 #define RESPONSE_H
 
 #include <stdlib.h>
+#include <curl/curl.h>
 
 struct Response {
     char *data;
