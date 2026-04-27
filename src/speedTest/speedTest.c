@@ -45,6 +45,7 @@ double speed_test_upload(const char* url, int size)
 
     double mbps = (response.uploadSpeed * 8.0) / 1e6;
 
+    free(data);
     free(response.data);
 
     return mbps;
