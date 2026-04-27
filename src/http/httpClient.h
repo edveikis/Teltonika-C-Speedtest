@@ -22,7 +22,7 @@ int http_get(const char* dst, struct Response* response, int discard);
 /// @param data data to be sent
 /// @param size size of data being sent
 /// @return status code
-int http_post(const char* dst, struct Response* response, const void* data, size_t size);
+int http_post(const char* dst, struct Response* response, const void* data, size_t size, int discard);
 
 
 #endif

@@ -5,6 +5,8 @@
 #include "../response.h"
 #include "../http/httpClient.h"
 
-int speed_test_download(const char* url, int size);
+double speed_test_download(const char* url, int size);
+
+double speed_test_upload(const char* url, int size);
 
 #endif

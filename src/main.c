@@ -11,7 +11,7 @@
 
 int main(int argc, char *argv[]) 
 {
-    speed_test_download("http://speedtest.tele2.net/100MB.zip", 0);
+    speed_test_upload("speed-kaunas.telia.lt:8080", 100);
 
     return 0;
 }
