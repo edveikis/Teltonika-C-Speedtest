@@ -7,7 +7,7 @@ int location_service_get(cJSON** root)
 
     if (res != APP_OK)
     {
-        printf("Request to API failed: %s\n", curl_easy_strerror(res));
+        printf("Request to API failed, code: %s\n", res);
         return APP_REQUEST_FAILED;
     }
 

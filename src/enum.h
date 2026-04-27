@@ -10,6 +10,6 @@ typedef enum {
     APP_FAILED_TO_GET_DOWN_SPEED,
     APP_FAILED_TO_GET_UP_SPEED,
 
-};
+} AppStatus;
 
 #endif

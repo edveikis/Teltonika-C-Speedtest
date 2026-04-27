@@ -27,9 +27,7 @@ size_t write_callback(void *data, size_t size, size_t element_count, void *user_
 /// @brief Callback function to discard data from request
 size_t discard_callback(void *data, size_t size, size_t element_count, void *user_data) 
 {
-    size_t total_size = size * element_count;
-
-    return total_size;
+    return size * element_count;
 }
 
 int http_get(const char* dst, struct Response* response, int discard)
