@@ -3,7 +3,7 @@
 int location_service_get(cJSON** root)
 {
     struct Response response = {0};
-    int res = makeRequest("http://ip-api.com/json/\?fields\=status,message,country,city", &response);
+    int res = http_get("http://ip-api.com/json/\?fields\=status,message,country,city", &response);
 
     if (res != APP_OK)
     {

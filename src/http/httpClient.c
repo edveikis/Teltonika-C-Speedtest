@@ -24,7 +24,7 @@ size_t write_callback(void *data, size_t size, size_t element_count, void *user_
     return total_size;
 }
 
-int http_make_request(const char* dst, struct Response* response)
+int http_get(const char* dst, struct Response* response)
 {
     CURL *curl = curl_easy_init();
 
@@ -32,12 +32,80 @@ int http_make_request(const char* dst, struct Response* response)
         return CURLE_FAILED_INIT;
 
     curl_easy_setopt(curl, CURLOPT_URL, dst);
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 15L);
+    // curl_easy_setopt(curl, CURLOPT_TIMEOUT, 15L);
+
+    // NOTE: kam rasyt duomenis i ram jei darom tik test?
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, response);
 
     CURLcode res = curl_easy_perform(curl);
 
+    if (res == CURLE_OK)
+    {
+        curl_off_t pretransfer_us = 0, total_us = 0, downloaded = 0;
+        curl_easy_getinfo(curl, CURLINFO_PRETRANSFER_TIME_T, &pretransfer_us);
+        curl_easy_getinfo(curl, CURLINFO_TOTAL_TIME_T,       &total_us);
+        curl_easy_getinfo(curl, CURLINFO_SIZE_DOWNLOAD_T,    &downloaded);
+
+        double transfer_sec = (total_us - pretransfer_us) / 1e6; // 1*10^6
+        response->downloadSize  = downloaded;
+        response->downloadSpeed = (curl_off_t)(transfer_sec > 0 ? downloaded / transfer_sec : 0); // Bytes per second
+    }
+   
+    curl_easy_cleanup(curl);
+
+    if (res != CURLE_OK) 
+    {
+        fprintf(stderr, "Request failed: %s\n",
+            curl_easy_strerror(res));
+        free(response->data);
+        response->data = NULL;
+        response->size = 0;
+        return APP_REQUEST_FAILED;
+    }
+
+    return CURLE_OK;
+}
+
+int http_post(const char* dst, struct Response* response, const void* data, size_t size)
+{
+    CURL *curl = curl_easy_init();
+
+    if (!curl)
+        return CURLE_FAILED_INIT;
+
+    struct curl_slist *headers = NULL;
+    headers = curl_slist_append(headers, "Content-Type: application/octet-stream");
+
+    // Make post request
+    curl_easy_setopt(curl, CURLOPT_POST, 1L);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE_LARGE, (curl_off_t)size);
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    curl_easy_setopt(curl, CURLOPT_URL, dst);
+    // curl_easy_setopt(curl, CURLOPT_TIMEOUT, 15L);
+
+    // NOTE: kam rasyt duomenis i ram jei darom tik test?
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, response);
+
+    CURLcode res = curl_easy_perform(curl);
+
+    if (res == CURLE_OK)
+    {
+        curl_off_t pretransfer_us = 0, total_us = 0, uploaded = 0;
+        curl_easy_getinfo(curl, CURLINFO_PRETRANSFER_TIME_T, &pretransfer_us);
+        curl_easy_getinfo(curl, CURLINFO_TOTAL_TIME_T,       &total_us);
+        curl_easy_getinfo(curl, CURLINFO_SIZE_UPLOAD_T,      &uploaded);
+        curl_easy_getinfo(curl, CURLINFO_SIZE_DOWNLOAD_T,    &response->downloadSize);
+
+        double transfer_sec = (total_us - pretransfer_us) / 1e6; // 1*10^6
+        response->uploadSize  = uploaded;
+        response->uploadSpeed = (curl_off_t)(transfer_sec > 0 ? uploaded / transfer_sec : 0); // Bytes per second
+        response->us_uploadTime = total_us;
+    }
+
+    curl_slist_free_all(headers);
     curl_easy_cleanup(curl);
 
     if (res != CURLE_OK) 
