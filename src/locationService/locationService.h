@@ -5,7 +5,7 @@
 #include <curl/curl.h>
 #include <string.h>
 
-#include "../memory.h"
+#include "../response.h"
 #include "../http/httpClient.h"
 #include "../lib/cjson/cJSON.h"
 

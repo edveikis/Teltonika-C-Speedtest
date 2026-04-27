@@ -6,7 +6,7 @@
 #include <memory.h>
 #include <curl/curl.h>
 
-#include "../memory.h"
+#include "../response.h"
 
 /// @brief Makes an HTTP request
 /// @param dst domain to make request to
