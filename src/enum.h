@@ -9,7 +9,9 @@ typedef enum {
     APP_API_FAILURE,
     APP_FAILED_TO_GET_DOWN_SPEED,
     APP_FAILED_TO_GET_UP_SPEED,
-
+    APP_SEARCH_FAILURE,
+    APP_ERROR,
+    APP_FAILED_TO_CONN_TO_SERV
 } AppStatus;
 
 #endif

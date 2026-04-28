@@ -60,6 +60,7 @@ int http_get(const char* dst, struct Response* response, int discard)
         double transfer_sec = (total_us - pretransfer_us) / 1e6; // 1*10^6
         response->downloadSize  = downloaded;
         response->downloadSpeed = (curl_off_t)(transfer_sec > 0 ? downloaded / transfer_sec : 0); // Bytes per second
+        response->us_downloadTime = total_us;
     }
    
     curl_easy_cleanup(curl);
@@ -68,13 +69,16 @@ int http_get(const char* dst, struct Response* response, int discard)
     {
         fprintf(stderr, "Request failed: %s\n",
             curl_easy_strerror(res));
-        free(response->data);
+        if (discard == 0)
+        {
+            free(response->data);
+        }
         response->data = NULL;
         response->size = 0;
         return APP_REQUEST_FAILED;
     }
 
-    return CURLE_OK;
+    return APP_OK;
 }
 
 int http_post(const char* dst, struct Response* response, const void* data, size_t size, int discard)
@@ -127,11 +131,14 @@ int http_post(const char* dst, struct Response* response, const void* data, size
     {
         fprintf(stderr, "Request failed: %s\n",
             curl_easy_strerror(res));
-        free(response->data);
+        if (discard == 0)
+        {
+            free(response->data);
+        }
         response->data = NULL;
         response->size = 0;
         return APP_REQUEST_FAILED;
     }
 
-    return CURLE_OK;
+    return APP_OK;
 }

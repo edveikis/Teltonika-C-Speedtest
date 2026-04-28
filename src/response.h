@@ -12,6 +12,8 @@ struct Response {
     curl_off_t us_uploadTime;
     curl_off_t downloadSpeed;
     curl_off_t uploadSpeed;
+    curl_off_t us_downloadTime;
+
 };
 
 #endif
