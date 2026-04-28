@@ -67,8 +67,6 @@ int http_get(const char* dst, struct Response* response, int discard)
 
     if (res != CURLE_OK && res != CURLE_OPERATION_TIMEDOUT) 
     {
-        fprintf(stderr, "Request failed: %s\n",
-            curl_easy_strerror(res));
         if (discard == 0)
         {
             free(response->data);
@@ -129,8 +127,6 @@ int http_post(const char* dst, struct Response* response, const void* data, size
 
     if (res != CURLE_OK && res != CURLE_OPERATION_TIMEDOUT) 
     {
-        fprintf(stderr, "Request failed: %s\n",
-            curl_easy_strerror(res));
         if (discard == 0)
         {
             free(response->data);
