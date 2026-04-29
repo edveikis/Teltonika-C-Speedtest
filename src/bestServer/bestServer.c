@@ -133,7 +133,6 @@ char* best_server_get(const char* speed_test_file)
         free_string_list(listCountry, sizeCountry);
         free_string_list(list, size);
         cJSON_Delete(root);
-        free(countryName);
         cJSON_Delete(location);
         return NULL;
     }
@@ -153,7 +152,6 @@ char* best_server_get(const char* speed_test_file)
         free_string_list(listCountry, sizeCountry);
         free_string_list(list, size);
         cJSON_Delete(root);
-        free(countryName);
         cJSON_Delete(location);
         return NULL;
     }
@@ -163,7 +161,6 @@ char* best_server_get(const char* speed_test_file)
 
     cJSON_Delete(location);
     cJSON_Delete(root);
-    free(countryName);
 
     return best;
 }
