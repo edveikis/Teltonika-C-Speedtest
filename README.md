@@ -67,13 +67,13 @@ make
 3. Download test
 
 ```bash
-./bin/speedtest -d http://example.com
+./bin/speedtest -d -s http://example.com
 ```
 
 4. Upload test
 
 ```bash
-./bin/speedtest -u http://example.com
+./bin/speedtest -u -s http://example.com
 ```
 
 NOTE: Download and upload can be used in one go.
