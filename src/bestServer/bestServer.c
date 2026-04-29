@@ -110,15 +110,33 @@ char* best_server_get(const char* speed_test_file)
     size_t size = 0;
     size_t capacity = 0;
 
-    if (split_servers_by_country(root, "Lithuania", 
+    cJSON *location = NULL;
+    if (location_service_get(&location) != APP_OK)
+    {
+        cJSON_Delete(root);
+        return NULL;
+    }
+
+    char* countryName = location_service_get_country(location);
+
+    if (countryName == NULL)
+    {
+        cJSON_Delete(root);
+        cJSON_Delete(location);
+        return NULL;
+    }
+
+    if (split_servers_by_country(root, countryName, 
             &listCountry, &sizeCountry, &capacityCountry,
             &list, &size, &capacity) != APP_OK)
-            {
-                free_string_list(listCountry, sizeCountry);
-                free_string_list(list, size);
-                cJSON_Delete(root);
-                return NULL;
-            }
+    {
+        free_string_list(listCountry, sizeCountry);
+        free_string_list(list, size);
+        cJSON_Delete(root);
+        free(countryName);
+        cJSON_Delete(location);
+        return NULL;
+    }
 
     char* best = NULL;
     size_t index = 0;
@@ -135,13 +153,17 @@ char* best_server_get(const char* speed_test_file)
         free_string_list(listCountry, sizeCountry);
         free_string_list(list, size);
         cJSON_Delete(root);
+        free(countryName);
+        cJSON_Delete(location);
         return NULL;
     }
 
     free_string_list(listCountry, sizeCountry);
     free_string_list(list, size);
 
+    cJSON_Delete(location);
     cJSON_Delete(root);
+    free(countryName);
 
     return best;
 }
