@@ -2,29 +2,31 @@
   <img height=300" alt="images" src="https://github.com/user-attachments/assets/e0f0de23-0e96-414a-972c-9775f839bc40" />
 </div>
 
-# Teltonika-c-speedtest
+# 🚀 Teltonika-C-Speedtest
 
 Simple CLI application that measures internet speeds.
 
-Features:
-* Measures upload speed
-* Measures download speed
-* Finds the best server from the list using users location
+## ✨ Features
 
-Built using:
-* libcurl
-* cJSON
-* getopt
+- ⬆️ Measures upload speed
+- ⬇️ Measures download speed
+- 🌍 Finds the best server from the list using the user's location
 
-## Dependencies
+## 🧰 Built With
 
-* libcurl
+- libcurl
+- cJSON
+- getopt
+
+## 📦 Dependencies
+
+- libcurl
 
 ```bash
 sudo dnf install libcurl-devel
 ```
 
-## Building
+## 🛠️ Building
 
 1. Clone repo
 
@@ -44,13 +46,13 @@ cd Teltonika-C-Speedtest
 make
 ```
 
-## Usage
+## ▶️ Usage
 
 ```bash
 ./bin/speedtest [OPTIONS]
 ```
 
-### Options
+### ⚙️ Options
 
 1. Full automatic test
 
@@ -78,7 +80,16 @@ make
 
 NOTE: Download and upload can be used in one go.
 
-## Task
+## 🌍 How Best-Server Selection Works
+
+When run with `-b` (or `-a`), the program looks up the user's country via
+[ip-api.com](http://ip-api.com), then splits the servers in
+`speedtest_server_list.json` into servers in that country and servers
+elsewhere, preferring same-country matches. Each candidate server is probed
+with a quick download request, and the one with the lowest response time is
+picked as the best server.
+
+## 📋 Task
 
 Šios užduoties tikslas sukurti programą, naudojant C programavimo kalbą, kuri nustatytų interneto duomenų parsisiuntimo ir išsiuntimo greitį.
 
@@ -120,4 +131,4 @@ Implementuoti programoje klaidų valdymo logiką.
 
 Programos rezultatą patalpinti github repozitorijoje. 
 
-Parašyti programos paruošimui Makefile. 
+Parašyti programos paruošimui Makefile.
